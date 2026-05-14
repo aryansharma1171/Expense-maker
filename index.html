@@ -1,82 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Report Maker | Arya x Etho AI</title>
+<head>    
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>Expense Report Maker | Arya x Etho AI</title>        
+    <link rel="manifest" href="manifest.json">    
+    <meta name="theme-color" content="#6366f1">    
+    <meta name="mobile-web-app-capable" content="yes">    
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">    
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2652/2652218.png">    
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#6366f1">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2652/2652218.png">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Required Libraries for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    
+
     <style>
         :root {
             --primary: #6366f1;
             --secondary: #64748b;
             --accent: #a855f7;
             --danger: #ef4444;
-            --bg: #f8fafc;
         }
-
-        * { box-sizing: border-box; }
-
+        
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
             margin: 0;
-            padding: 10px;
-            display: flex;
-            justify-content: center;
+            padding: 20px 10px;
         }
 
         .container {
-            width: 100%;
-            max-width: 900px;
+            max-width: 800px;
+            margin: 0 auto;
             background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-top: 10px;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .brand-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
+        .brand-header { text-align: center; margin-bottom: 2rem; }
+        .brand-header h1 { margin: 0; color: #0f172a; font-size: 1.8rem; }
+        .brand-subtitle { color: var(--secondary); font-size: 0.9rem; font-weight: 600; }
 
-        .brand-header h1 {
-            margin: 0;
-            font-size: 1.6rem;
-            color: #1e293b;
-            font-weight: 800;
-        }
-
-        .brand-subtitle {
-            font-size: 0.8rem;
-            color: var(--secondary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 4px;
-            display: block;
-        }
-
-        /* Responsive Form Grid */
         .input-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-
+        
         .input-group { display: flex; flex-direction: column; }
-        label { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.4rem; color: #475569; }
+        label { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.4rem; color: #475569; }                
         
         input {
             padding: 0.75rem;
@@ -85,15 +59,15 @@
             font-size: 1rem;
             outline-color: var(--primary);
         }
-
+        
         /* Buttons Grid */
         .actions { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem; 
-            margin-bottom: 2rem; 
-        }
-
+             display: grid; 
+             grid-template-columns: repeat(2, 1fr);
+             gap: 0.75rem; 
+             margin-bottom: 2rem; 
+         }
+         
         button {
             cursor: pointer;
             padding: 0.8rem;
@@ -103,22 +77,20 @@
             color: white;
             transition: transform 0.1s;
         }
-
+        
         button:active { transform: scale(0.98); }
-
         .btn-add { background: var(--primary); grid-column: span 2; font-size: 1.1rem; }
         .btn-json-dl { background: var(--secondary); }
         .btn-json-ul { background: var(--accent); }
-        .btn-pdf { background: #0f172a; grid-column: span 2; }
-        
+        .btn-pdf { background: #0f172a; grid-column: span 2; }                
         #fileInput { display: none; }
-
+        
         /* Data Display */
         .table-container { overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0; }
         table { width: 100%; border-collapse: collapse; background: white; }
         th, td { text-align: left; padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; }
         th { background: #f8fafc; color: #64748b; white-space: nowrap; }
-
+        
         .total-banner {
             font-size: 1.4rem;
             font-weight: 800;
@@ -128,9 +100,9 @@
             border-radius: 12px;
             margin-top: 1rem;
         }
-
-        .delete-btn { background: #fee2e2; color: var(--danger); border-radius: 4px; padding: 4px 8px; font-size: 0.7rem; }
-
+        
+        .delete-btn { background: #fee2e2; border: none; cursor: pointer; color: var(--danger); border-radius: 4px; padding: 6px 10px; font-size: 0.75rem; font-weight: bold; }
+        
         @media (max-width: 640px) {
             .brand-header h1 { font-size: 1.3rem; }
             .container { padding: 1rem; }
@@ -139,57 +111,62 @@
     </style>
 </head>
 <body>
+<div class="container">    
+    <header class="brand-header">        
+        <h1>Expense Report Maker</h1>        
+        <span class="brand-subtitle">by Arya x Etho AI</span>    
+    </header>    
 
-<div class="container">
-    <header class="brand-header">
-        <h1>Expense Report Maker</h1>
-        <span class="brand-subtitle">by Arya x Etho AI</span>
-    </header>
+    <div class="input-grid">        
+        <div class="input-group">            
+            <label>Transaction Date</label>            
+            <input type="date" id="date">        
+        </div>        
+        <div class="input-group">            
+            <label>Paid By (Name)</label>            
+            <!-- Added datalist for default names -->
+            <input type="text" id="name" list="defaultNames" placeholder="Choose or type name">        
+            <datalist id="defaultNames">
+                <option value="Aryan Sharma"></option>
+                <option value="Yash"></option>
+                <option value="Shivek"></option>
+            </datalist>
+        </div>        
+        <div class="input-group">            
+            <label>Amount (₹)</label>            
+            <input type="number" id="amount" placeholder="0.00" step="0.01">        
+        </div>        
+        <div class="input-group">            
+            <label>Purpose</label>            
+            <input type="text" id="purpose" placeholder="What was it for?">        
+        </div>    
+    </div>    
 
-    <div class="input-grid">
-        <div class="input-group">
-            <label>Transaction Date</label>
-            <input type="date" id="date">
-        </div>
-        <div class="input-group">
-            <label>Paid By (Name)</label>
-            <input type="text" id="name" placeholder="Enter name">
-        </div>
-        <div class="input-group">
-            <label>Amount (₹)</label>
-            <input type="number" id="amount" placeholder="0.00" step="0.01">
-        </div>
-        <div class="input-group">
-            <label>Purpose</label>
-            <input type="text" id="purpose" placeholder="What was it for?">
-        </div>
-    </div>
+    <div class="actions">        
+        <button class="btn-add" onclick="addExpense()">+ Add Expense</button>        
+        <button class="btn-json-dl" onclick="downloadJSON()">💾 Export JSON</button>        
+        <button class="btn-json-ul" onclick="document.getElementById('fileInput').click()">📂 Import JSON</button>        
+        <button class="btn-pdf" onclick="generatePDF()">📄 Download PDF Report</button>        
+        <input type="file" id="fileInput" accept=".json" onchange="uploadJSON(event)">    
+    </div>    
 
-    <div class="actions">
-        <button class="btn-add" onclick="addExpense()">+ Add Expense</button>
-        <button class="btn-json-dl" onclick="downloadJSON()">💾 Export JSON</button>
-        <button class="btn-json-ul" onclick="document.getElementById('fileInput').click()">📂 Import JSON</button>
-        <button class="btn-pdf" onclick="generatePDF()">📄 Download PDF Report</button>
-        <input type="file" id="fileInput" accept=".json" onchange="uploadJSON(event)">
-    </div>
+    <div class="table-container">        
+        <table>            
+            <thead>                
+                <tr>                    
+                    <th>Date</th>                    
+                    <th>Name</th>                    
+                    <th>Amount</th>                    
+                    <th>Purpose</th>                    
+                    <th>Action</th>                
+                </tr>            
+            </thead>            
+            <tbody id="expenseBody"></tbody>        
+        </table>    
+    </div>    
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Amount</th>
-                    <th>Purpose</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="expenseBody"></tbody>
-        </table>
-    </div>
-
-    <div class="total-banner">
-        Total: ₹<span id="totalAmount">0.00</span>
+    <div class="total-banner">        
+        Total: ₹<span id="totalAmount">0.00</span>    
     </div>
 </div>
 
@@ -197,126 +174,150 @@
     // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Registration failed:', err));
         });
     }
 
+    // State Management
     let expenses = [];
     document.getElementById('date').valueAsDate = new Date();
 
-    // Human-readable date formatting (Day Month Year)
-    function formatDateLong(dateStr) {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-GB', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
+    // 1. Update the UI Table
+    function updateUI() {
+        const tbody = document.getElementById('expenseBody');
+        const totalAmountEl = document.getElementById('totalAmount');
+        tbody.innerHTML = '';
+        let total = 0;
+
+        expenses.forEach((expense, index) => {
+            total += expense.amount;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${expense.date}</td>
+                <td>${expense.name}</td>
+                <td>₹${expense.amount.toFixed(2)}</td>
+                <td>${expense.purpose}</td>
+                <td><button class="delete-btn" onclick="deleteExpense(${index})">Remove</button></td>
+            `;
+            tbody.appendChild(tr);
         });
+
+        totalAmountEl.textContent = total.toFixed(2);
     }
 
+    // 2. Add Expense
     function addExpense() {
         const date = document.getElementById('date').value;
-        const name = document.getElementById('name').value;
+        const name = document.getElementById('name').value.trim();
         const amount = parseFloat(document.getElementById('amount').value);
-        const purpose = document.getElementById('purpose').value;
+        const purpose = document.getElementById('purpose').value.trim();
 
         if (!date || !name || isNaN(amount) || !purpose) {
-            alert("Please fill in all details.");
+            alert('Please fill out all fields correctly.');
             return;
         }
 
-        expenses.push({ id: Date.now(), date, name, amount, purpose });
+        expenses.push({ date, name, amount, purpose });
         updateUI();
-        
-        // Reset inputs
-        document.getElementById('name').value = '';
+
+        // Clear inputs for next entry (keep date and name for convenience)
         document.getElementById('amount').value = '';
         document.getElementById('purpose').value = '';
     }
 
-    function deleteExpense(id) {
-        expenses = expenses.filter(e => e.id !== id);
+    // 3. Delete Expense
+    function deleteExpense(index) {
+        expenses.splice(index, 1);
         updateUI();
     }
 
-    function updateUI() {
-        const tbody = document.getElementById('expenseBody');
-        const totalEl = document.getElementById('totalAmount');
-        tbody.innerHTML = '';
-        
-        let total = 0;
-        expenses.sort((a,b) => new Date(b.date) - new Date(a.date)); // Newest first
-
-        expenses.forEach(exp => {
-            total += exp.amount;
-            tbody.innerHTML += `
-                <tr>
-                    <td>${formatDateLong(exp.date)}</td>
-                    <td><b>${exp.name}</b></td>
-                    <td>₹${exp.amount.toFixed(2)}</td>
-                    <td>${exp.purpose}</td>
-                    <td><button class="delete-btn" onclick="deleteExpense(${exp.id})">Delete</button></td>
-                </tr>
-            `;
-        });
-        totalEl.innerText = total.toLocaleString('en-IN', {minimumFractionDigits: 2});
-    }
-
+    // 4. Download JSON
     function downloadJSON() {
-        if (expenses.length === 0) return alert("No data to export.");
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(expenses));
-        const dl = document.createElement('a');
-        dl.setAttribute("href", dataStr);
-        dl.setAttribute("download", `Expenses_${new Date().toISOString().slice(0,10)}.json`);
-        dl.click();
+        if (expenses.length === 0) {
+            alert("No expenses to export.");
+            return;
+        }
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(expenses, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "expenses_backup.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
     }
 
+    // 5. Upload JSON
     function uploadJSON(event) {
         const file = event.target.files[0];
         if (!file) return;
+
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = function(e) {
             try {
-                expenses = JSON.parse(e.target.result);
-                updateUI();
-            } catch { alert("Invalid JSON file"); }
+                const parsed = JSON.parse(e.target.result);
+                if (Array.isArray(parsed)) {
+                    expenses = parsed;
+                    updateUI();
+                    alert("Expenses imported successfully!");
+                } else {
+                    alert("Invalid JSON format.");
+                }
+            } catch (err) {
+                alert("Error parsing JSON file.");
+            }
         };
         reader.readAsText(file);
+        event.target.value = ''; // Reset input
     }
 
+    // 6. Generate PDF via jsPDF & AutoTable
     function generatePDF() {
-        if (expenses.length === 0) return alert("Add expenses first.");
+        if (expenses.length === 0) {
+            alert("Please add at least one expense before generating a PDF.");
+            return;
+        }
+
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        // Header
+        // Title & Header
         doc.setFontSize(22);
-        doc.setTextColor(99, 102, 241);
-        doc.text("Expense Report", 14, 20);
+        doc.setTextColor(15, 23, 42);
+        doc.text("Expense Report", 14, 22);
         
         doc.setFontSize(10);
         doc.setTextColor(100, 116, 139);
-        doc.text("Generated by Arya x Etho AI", 14, 26);
+        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+        doc.text("Arya x Etho AI", 14, 35);
+
+        // Prep Data for Table
+        const tableBody = expenses.map(exp => [
+            exp.date, 
+            exp.name, 
+            exp.purpose, 
+            exp.amount.toFixed(2)
+        ]);
         
-        const tableData = expenses.map(exp => [
-            formatDateLong(exp.date),
-            exp.name,
-            `Rs. ${exp.amount.toFixed(2)}`,
-            exp.purpose
+        const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+
+        // Add Total Row
+        tableBody.push([
+            { content: 'TOTAL', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: total.toFixed(2), styles: { fontStyle: 'bold' } }
         ]);
 
+        // Draw Table
         doc.autoTable({
-            startY: 32,
-            head: [['Date', 'Paid By', 'Amount', 'Purpose']],
-            body: tableData,
-            foot: [['', 'TOTAL', `Rs. ${expenses.reduce((s, e) => s + e.amount, 0).toFixed(2)}`, '']],
+            startY: 45,
+            head: [['Date', 'Paid By', 'Purpose', 'Amount (INR)']],
+            body: tableBody,
+            theme: 'striped',
             headStyles: { fillColor: [99, 102, 241] },
-            theme: 'striped'
+            styles: { fontSize: 10, cellPadding: 4 }
         });
 
-        doc.save(`Expense_Report_${Date.now()}.pdf`);
+        doc.save('Expense_Report.pdf');
     }
 </script>
-
 </body>
 </html>
