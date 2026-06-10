@@ -8,9 +8,8 @@
     <meta name="theme-color" content="#6366f1">    
     <meta name="mobile-web-app-capable" content="yes">    
     <meta name="apple-mobile-web-app-status-bar-style" content="default">    
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2652/2652218.png">    
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/aryansharma1171/webimages/main/Etho%20ai%20logo.webp">    
     
-    <!-- Required Libraries for PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
@@ -20,6 +19,8 @@
             --secondary: #64748b;
             --accent: #a855f7;
             --danger: #ef4444;
+            --success: #10b981;
+            --dark: #1e293b;
         }
         
         body {
@@ -35,13 +36,35 @@
             background: white;
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        .brand-header { text-align: center; margin-bottom: 2rem; }
-        .brand-header h1 { margin: 0; color: #0f172a; font-size: 1.8rem; }
-        .brand-subtitle { color: var(--secondary); font-size: 0.9rem; font-weight: 600; }
+        /* Branding & Header */
+        .brand-header { text-align: center; margin-bottom: 2.5rem; }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
 
+        .brand-logo {
+            height: 65px;
+            width: 65px;
+            object-fit: cover; /* Ensures images fill the circle completely */
+            border-radius: 50%; /* Makes the image perfectly circular */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            padding: 2px;
+        }
+
+        .brand-header h1 { margin: 0; color: #0f172a; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; }
+        .brand-subtitle { color: var(--secondary); font-size: 0.95rem; font-weight: 600; margin-top: 4px; }
+        .current-date { color: var(--primary); font-size: 0.85rem; font-weight: 700; margin-top: 0.8rem; display: inline-block; background: #e0e7ff; padding: 4px 12px; border-radius: 20px; }
+
+        /* Input Form */
         .input-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -50,7 +73,7 @@
         }
         
         .input-group { display: flex; flex-direction: column; }
-        label { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.4rem; color: #475569; }                
+        label { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.4rem; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; }                
         
         input {
             padding: 0.75rem;
@@ -58,9 +81,11 @@
             border-radius: 8px;
             font-size: 1rem;
             outline-color: var(--primary);
+            transition: border-color 0.2s;
         }
+        input:focus { border-color: var(--primary); }
         
-        /* Buttons Grid */
+        /* Buttons */
         .actions { 
              display: grid; 
              grid-template-columns: repeat(2, 1fr);
@@ -75,46 +100,96 @@
             border-radius: 8px;
             font-weight: 600;
             color: white;
-            transition: transform 0.1s;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
-        button:active { transform: scale(0.98); }
+        button:active { transform: scale(0.97); }
+        button:hover { opacity: 0.9; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        
         .btn-add { background: var(--primary); grid-column: span 2; font-size: 1.1rem; }
         .btn-json-dl { background: var(--secondary); }
         .btn-json-ul { background: var(--accent); }
-        .btn-pdf { background: #0f172a; grid-column: span 2; }                
+        .btn-pdf { background: var(--dark); grid-column: span 2; font-size: 1.05rem; }                
         #fileInput { display: none; }
         
-        /* Data Display */
+        /* Table */
         .table-container { overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0; }
         table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; }
-        th { background: #f8fafc; color: #64748b; white-space: nowrap; }
+        th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; }
+        th { background: #f8fafc; color: #475569; white-space: nowrap; font-weight: 700; }
+        td.text-center, th.text-center { text-align: center; }
+        tr:last-child td { border-bottom: none; }
         
+        /* Totals Banner */
         .total-banner {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 800;
             text-align: right;
-            padding: 1rem;
+            padding: 1.2rem;
             background: #f8fafc;
+            color: var(--dark);
             border-radius: 12px;
             margin-top: 1rem;
+            border: 2px dashed #cbd5e1;
         }
+        .total-banner span { color: var(--primary); }
         
-        .delete-btn { background: #fee2e2; border: none; cursor: pointer; color: var(--danger); border-radius: 4px; padding: 6px 10px; font-size: 0.75rem; font-weight: bold; }
+        .delete-btn { background: #fee2e2; border: none; cursor: pointer; color: var(--danger); border-radius: 6px; padding: 6px 12px; font-size: 0.75rem; font-weight: bold; }
+        .delete-btn:hover { background: #fca5a5; color: #991b1b; }
         
+        /* Toasts */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            min-width: 250px;
+            padding: 14px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background-color: var(--success); }
+        .toast.error { background-color: var(--danger); }
+        .toast.info { background-color: var(--primary); }
+
         @media (max-width: 640px) {
-            .brand-header h1 { font-size: 1.3rem; }
-            .container { padding: 1rem; }
+            .brand-header h1 { font-size: 1.5rem; }
+            .container { padding: 1.2rem; }
             td { min-width: 100px; }
+            #toast-container { left: 20px; right: 20px; bottom: 20px; }
+            .toast { min-width: auto; text-align: center; }
+            .brand-logo { height: 50px; width: 50px; }
         }
     </style>
 </head>
 <body>
 <div class="container">    
-    <header class="brand-header">        
+    <header class="brand-header">
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/A.S%20Main%20Logo.png" alt="A.S Owner Logo" class="brand-logo">
+            <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/Etho%20ai%20logo.webp" alt="Etho AI Logo" class="brand-logo">
+        </div>
         <h1>Expense Report Maker</h1>        
-        <span class="brand-subtitle">by Arya x Etho AI</span>    
+        <div class="brand-subtitle">by Arya x Etho AI</div>    
+        <div class="current-date" id="displayDate"></div>
     </header>    
 
     <div class="input-grid">        
@@ -124,12 +199,9 @@
         </div>        
         <div class="input-group">            
             <label>Paid By (Name)</label>            
-            <!-- Added datalist for default names -->
             <input type="text" id="name" list="defaultNames" placeholder="Choose or type name">        
             <datalist id="defaultNames">
                 <option value="Aryan Sharma"></option>
-                <option value="Yash"></option>
-                <option value="Shivek"></option>
             </datalist>
         </div>        
         <div class="input-group">            
@@ -146,7 +218,7 @@
         <button class="btn-add" onclick="addExpense()">+ Add Expense</button>        
         <button class="btn-json-dl" onclick="downloadJSON()">💾 Export JSON</button>        
         <button class="btn-json-ul" onclick="document.getElementById('fileInput').click()">📂 Import JSON</button>        
-        <button class="btn-pdf" onclick="generatePDF()">📄 Download PDF Report</button>        
+        <button class="btn-pdf" onclick="generatePDF()">📄 Download Pro PDF Report</button>        
         <input type="file" id="fileInput" accept=".json" onchange="uploadJSON(event)">    
     </div>    
 
@@ -154,6 +226,7 @@
         <table>            
             <thead>                
                 <tr>                    
+                    <th class="text-center">Sr No.</th>                    
                     <th>Date</th>                    
                     <th>Name</th>                    
                     <th>Amount</th>                    
@@ -170,19 +243,84 @@
     </div>
 </div>
 
+<div id="toast-container"></div>
+
 <script>
-    // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Registration failed:', err));
         });
     }
 
-    // State Management
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    function getFormattedDate(dateObj = new Date()) {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        const month = months[dateObj.getMonth()];
+        const year = dateObj.getFullYear();
+        return `${day} ${month} ${year}`;
+    }
+
+    // Helper: Converts image URLs to a circular Base64 png for jsPDF
+    function getCircularBase64ImageFromURL(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                // Create a square canvas matching the smallest dimension
+                const size = Math.min(img.width, img.height);
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext("2d");
+                
+                // Draw white circular background
+                ctx.beginPath();
+                ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2, true);
+                ctx.closePath();
+                ctx.fillStyle = "#ffffff";
+                ctx.fill();
+                
+                // Clip canvas strictly to that circle
+                ctx.clip();
+
+                // Calculate center crop offsets for the image inside the circle
+                const aspect = img.width / img.height;
+                let sx = 0, sy = 0, sw = img.width, sh = img.height;
+                if (aspect > 1) { // image is wider
+                    sw = img.height;
+                    sx = (img.width - img.height) / 2;
+                } else { // image is taller
+                    sh = img.width;
+                    sy = (img.height - img.width) / 2;
+                }
+                
+                // Draw the perfectly cropped image
+                ctx.drawImage(img, sx, sy, sw, sh, 0, 0, size, size);
+                resolve(canvas.toDataURL("image/png"));
+            };
+            img.onerror = error => reject(error);
+            img.src = url;
+        });
+    }
+
     let expenses = [];
     document.getElementById('date').valueAsDate = new Date();
+    document.getElementById('displayDate').textContent = `Today: ${getFormattedDate()}`;
 
-    // 1. Update the UI Table
     function updateUI() {
         const tbody = document.getElementById('expenseBody');
         const totalAmountEl = document.getElementById('totalAmount');
@@ -193,6 +331,7 @@
             total += expense.amount;
             const tr = document.createElement('tr');
             tr.innerHTML = `
+                <td class="text-center"><b>${index + 1}</b></td>
                 <td>${expense.date}</td>
                 <td>${expense.name}</td>
                 <td>₹${expense.amount.toFixed(2)}</td>
@@ -201,11 +340,9 @@
             `;
             tbody.appendChild(tr);
         });
-
         totalAmountEl.textContent = total.toFixed(2);
     }
 
-    // 2. Add Expense
     function addExpense() {
         const date = document.getElementById('date').value;
         const name = document.getElementById('name').value.trim();
@@ -213,40 +350,35 @@
         const purpose = document.getElementById('purpose').value.trim();
 
         if (!date || !name || isNaN(amount) || !purpose) {
-            alert('Please fill out all fields correctly.');
+            showToast('Please fill out all fields correctly.', 'error');
             return;
         }
 
         expenses.push({ date, name, amount, purpose });
         updateUI();
+        showToast('Expense added successfully!');
 
-        // Clear inputs for next entry (keep date and name for convenience)
         document.getElementById('amount').value = '';
         document.getElementById('purpose').value = '';
     }
 
-    // 3. Delete Expense
     function deleteExpense(index) {
         expenses.splice(index, 1);
         updateUI();
+        showToast('Expense removed', 'error');
     }
 
-    // 4. Download JSON
     function downloadJSON() {
         if (expenses.length === 0) {
-            alert("No expenses to export.");
-            return;
+            showToast("No expenses to export.", "error"); return;
         }
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(expenses, null, 2));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "expenses_backup.json");
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
+        const a = document.createElement('a');
+        a.href = dataStr; a.download = "expenses_backup.json";
+        document.body.appendChild(a); a.click(); a.remove();
+        showToast('Backup downloaded securely.');
     }
 
-    // 5. Upload JSON
     function uploadJSON(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -256,67 +388,101 @@
             try {
                 const parsed = JSON.parse(e.target.result);
                 if (Array.isArray(parsed)) {
-                    expenses = parsed;
-                    updateUI();
-                    alert("Expenses imported successfully!");
-                } else {
-                    alert("Invalid JSON format.");
-                }
-            } catch (err) {
-                alert("Error parsing JSON file.");
-            }
+                    expenses = parsed; updateUI(); showToast("Expenses imported successfully!");
+                } else showToast("Invalid JSON format.", "error");
+            } catch (err) { showToast("Error parsing JSON file.", "error"); }
         };
         reader.readAsText(file);
-        event.target.value = ''; // Reset input
+        event.target.value = ''; 
     }
 
-    // 6. Generate PDF via jsPDF & AutoTable
-    function generatePDF() {
+    async function generatePDF() {
         if (expenses.length === 0) {
-            alert("Please add at least one expense before generating a PDF.");
+            showToast("Please add expenses before generating a PDF.", "error");
             return;
         }
 
+        showToast("Generating Pro PDF...", "info");
+
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-
-        // Title & Header
-        doc.setFontSize(22);
-        doc.setTextColor(15, 23, 42);
-        doc.text("Expense Report", 14, 22);
         
-        doc.setFontSize(10);
-        doc.setTextColor(100, 116, 139);
-        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
-        doc.text("Arya x Etho AI", 14, 35);
+        const logo1URL = "https://raw.githubusercontent.com/aryansharma1171/webimages/main/A.S%20Main%20Logo.png";
+        const logo2URL = "https://raw.githubusercontent.com/aryansharma1171/webimages/main/Etho%20ai%20logo.webp";
 
-        // Prep Data for Table
-        const tableBody = expenses.map(exp => [
+        let asLogo = null, ethoLogo = null;
+        try {
+            // Using the updated circular cropper
+            asLogo = await getCircularBase64ImageFromURL(logo1URL);
+            ethoLogo = await getCircularBase64ImageFromURL(logo2URL);
+        } catch (error) {
+            console.warn("Could not fetch remote logos. Generating text-only header.", error);
+        }
+
+        // ==========================================
+        // 1. HEADER DESIGN
+        // ==========================================
+        doc.setFillColor(30, 41, 59); // Dark slate background
+        doc.rect(0, 0, 210, 52, 'F');
+
+        // Draw the circular logos
+        if (asLogo) doc.addImage(asLogo, 'PNG', 160, 10, 16, 16);
+        if (ethoLogo) doc.addImage(ethoLogo, 'PNG', 180, 10, 16, 16);
+
+        // Header Text
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(24);
+        doc.setFont("helvetica", "bold");
+        doc.text("EXPENSE REPORT", 14, 22);
+
+        // Subtitles and Contact Info
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(148, 163, 184);
+        doc.text("Arya x Etho AI", 14, 30);
+        doc.text(`Generated on: ${getFormattedDate()}`, 14, 36);
+        doc.text("Contact Us: aryansharma98g@gmail.com", 14, 42);
+
+        // ==========================================
+        // 2. TOTAL AMOUNT
+        // ==========================================
+        const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+        doc.setFontSize(15);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.text(`TOTAL: INR ${total.toFixed(2)}`, 196, 40, { align: 'right' });
+
+        // ==========================================
+        // 3. TABLE GENERATION
+        // ==========================================
+        const tableBody = expenses.map((exp, index) => [
+            index + 1,
             exp.date, 
             exp.name, 
             exp.purpose, 
             exp.amount.toFixed(2)
         ]);
         
-        const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-
-        // Add Total Row
         tableBody.push([
-            { content: 'TOTAL', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold' } },
-            { content: total.toFixed(2), styles: { fontStyle: 'bold' } }
+            { content: 'GRAND TOTAL', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold', fillColor: [241, 245, 249] } },
+            { content: total.toFixed(2), styles: { fontStyle: 'bold', halign: 'right', fillColor: [241, 245, 249] } }
         ]);
 
-        // Draw Table
         doc.autoTable({
-            startY: 45,
-            head: [['Date', 'Paid By', 'Purpose', 'Amount (INR)']],
+            startY: 60,
+            head: [['Sr No.', 'Date', 'Paid By', 'Purpose', 'Amount (INR)']],
             body: tableBody,
             theme: 'striped',
-            headStyles: { fillColor: [99, 102, 241] },
-            styles: { fontSize: 10, cellPadding: 4 }
+            headStyles: { fillColor: [99, 102, 241], halign: 'left', fontSize: 11 },
+            columnStyles: {
+                0: { halign: 'center', cellWidth: 20 },
+                4: { halign: 'right' }
+            },
+            styles: { fontSize: 10, cellPadding: 6 }
         });
 
-        doc.save('Expense_Report.pdf');
+        doc.save(`Expense_Report_${getFormattedDate().replace(/ /g, '_')}.pdf`);
+        showToast("PDF Downloaded Successfully!");
     }
 </script>
 </body>
